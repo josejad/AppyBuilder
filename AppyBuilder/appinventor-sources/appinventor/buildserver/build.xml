@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ======================================================================
+     Copyright 2011 Google Inc.  All Rights Reserved.
+     Author: markf@google.com (Mark Friedman)
+
+     AppyBuilder build server
+     ====================================================================== -->
+
+<project name="buildserver" default="all">
+  <description>
+    AppyBuilder build server
+  </description>
+
+  <!-- Project Libraries -->
+
+  <target name="all"
+          depends="BuildServer">
+  </target>
+
+  <target name="tests"
+          depends="BuildServerTests">
+
+  </target>
+
+  <!-- =====================================================================
+       Import common directory, task, and target definitions.
+       ===================================================================== -->
+  <import file="../build-common.xml" />
+
+  <!-- =====================================================================
+       Define base package path.
+       ===================================================================== -->
+  <property name="buildserver.pkg" value="com/google/appinventor/buildserver" />
+
+  <property name="local.lib.dir" location="lib" />
+  <property name="run.dir" location="${local.build.dir}/run" />
+  <property name="run.lib.dir" location="${run.dir}/lib" />
+
+  <!-- =====================================================================
+       Targets
+       ===================================================================== -->
+
+  <!-- =====================================================================
+       BuildServer: produces build/run/lib/BuildServer.jar
+       Note that BuildServer depends on CopyToRunLibDir, which copies all
+       the jars needed to compile the build server classes.
+       ===================================================================== -->
+  <target name="BuildServer"
+          depends="init,CopyToRunLibDir,components_AndroidRuntime,components_Barcode,components_ComponentList">
+    <property name="BuildServer-class.dir" location="${class.dir}/BuildServer" />
+    <mkdir dir="${BuildServer-class.dir}" />
+
+    <ai.javac encoding="utf-8" destdir="${BuildServer-class.dir}" debug="on">
+      <include name="${buildserver.pkg}/**/*.java" />
+      <classpath>
+        <fileset dir="${run.lib.dir}" includes="*.jar" excludes="BuildServer.jar"/>
+      </classpath>
+    </ai.javac>
+
+    <!-- Copy files that will be loaded as resources -->
+    <property name="classes.files.dir" location="${BuildServer-class.dir}/files" />
+    <copy todir="${classes.files.dir}" flatten="true">
+      <fileset dir="${src.dir}/${buildserver.pkg}/resources" includes="*"/>
+      <fileset dir="${build.dir}/components"
+               includes="AndroidRuntime.jar,Barcode.jar,simple_components.txt,simple_components_build_info.json,simple_components.json"/>
+    </copy>
+    <copy toFile="${classes.files.dir}/kawa.jar" file="${lib.dir}/kawa/kawa-1.11-modified.jar" />
+    <copy toFile="${classes.files.dir}/acra-4.4.0.jar" file="${lib.dir}/acra/acra-4.4.0.jar" />
+    <copy toFile="${classes.files.dir}/twitter4j.jar" file="${lib.dir}/twitter/twitter4j-core-3.0.5.jar" />
+    <copy toFile="${classes.files.dir}/twitter4jmedia.jar" file="${lib.dir}/twitter/twitter4j-media-support-3.0.5.jar" />
+    <copy toFile="${classes.files.dir}/httpcore-4.3.2.jar" file="${lib.dir}/apache-http/httpcore-4.3.2.jar" />
+    <copy toFile="${classes.files.dir}/httpmime-4.3.4.jar" file="${lib.dir}/apache-http/httpmime-4.3.4.jar" />
+    <copy toFile="${classes.files.dir}/fusiontables.jar" file="${lib.dir}/fusiontables/fusiontables.jar" />
+    <copy toFile="${classes.files.dir}/firebase.jar" file="${lib.dir}/firebase/firebase-client-android-2.5.0.jar" />
+    <copy toFile="${classes.files.dir}/google-api-client-beta.jar" file="${lib.dir}/oauth/google-api-client-1.10.3-beta.jar" />
+    <copy toFile="${classes.files.dir}/google-play-services.jar" file="${lib.dir}/admob/google-play-services.jar" />
+    <copy toFile="${classes.files.dir}/onesignal.jar" file="${lib.dir}/monetization/onesignal/onesignal.jar" />
+    <copy toFile="${classes.files.dir}/circle-image-view.jar" file="${lib.dir}/image/circle-image-view.jar" />
+    <copy toFile="${classes.files.dir}/round-image2.jar" file="${lib.dir}/image/round-image2.jar" />
+      <copy toFile="${classes.files.dir}/commons-io-2.0.1.jar" file="${lib.dir}/commons-io/commons-io-2.0.1.jar" />
+    <copy toFile="${classes.files.dir}/android-support-v4.jar" file="${lib.dir}/android_support/android-support-v4.jar" />
+    <copy toFile="${classes.files.dir}/appybuilder-billing3-1.0.32.jar" file="${lib.dir}/billing/appybuilder-billing3-1.0.32.jar" />
+    <copy toFile="${classes.files.dir}/commons-net-3.4.jar" file="${lib.dir}/commons-net/commons-net-3.4.jar" />
+    <copy toFile="${classes.files.dir}/metadata-extractor-2.8.1.jar" file="${lib.dir}/image/metadata-extractor-2.8.1.jar" />
+    <copy toFile="${classes.files.dir}/MMSDK.jar" file="${lib.dir}/monetization/mmedia/MMSDK.jar" />
+    <copy toFile="${classes.files.dir}/listviewanimations.jar" file="${lib.dir}/animation/listviewanimations.jar" />
+    <copy toFile="${classes.files.dir}/spinkit.jar" file="${lib.dir}/animation/spinkit.jar" />
+    <copy toFile="${classes.files.dir}/amazon-ads-5.8.1.1.jar" file="${lib.dir}/amazon/amazon-ads-5.8.1.1.jar" />
+      <copy toFile="${classes.files.dir}/Androidplot-core-0.5.0-release.jar" file="${lib.dir}/chart/Androidplot-core-0.5.0-release.jar" />
+
+    <copy toFile="${classes.files.dir}/google-http-client-beta.jar" file="${lib.dir}/oauth/google-http-client-1.10.3-beta.jar" />
+    <copy toFile="${classes.files.dir}/google-api-client-android2-beta.jar" file="${lib.dir}/oauth/google-api-client-android2-1.10.3-beta.jar" />
+    <copy toFile="${classes.files.dir}/google-http-client-android2-beta.jar" file="${lib.dir}/oauth/google-http-client-android2-1.10.3-beta.jar" />
+    <copy toFile="${classes.files.dir}/google-http-client-android3-beta.jar" file="${lib.dir}/oauth/google-http-client-android3-1.10.3-beta.jar" />
+    <copy toFile="${classes.files.dir}/gson-2.1.jar" file="${lib.dir}/gson/gson-2.1.jar" />
+    <copy toFile="${classes.files.dir}/json.jar" file="${lib.dir}/json/json.jar" />
+    <copy toFile="${classes.files.dir}/google-oauth-client-beta.jar" file="${lib.dir}/oauth/google-oauth-client-1.10.1-beta.jar" />
+    <copy toFile="${classes.files.dir}/guava-14.0.1.jar" file="${lib.dir}/guava/guava-14.0.1.jar" />
+    <copy toFile="${classes.files.dir}/core.jar" file="${lib.dir}/QRGenerator/core.jar" />
+    <copy toFile="${classes.files.dir}/android.jar" file="${lib.dir}/android/5.1.1/android.jar" />
+    <copy toFile="${classes.files.dir}/dx.jar" file="${lib.dir}/android/tools/dx.jar" />
+    <copy toFile="${classes.files.dir}/moxieuploader.jar" file="${lib.dir}/moxieapps/org.moxieapps.gwt.uploader-1.1.0.jar" />
+    <copy toFile="${classes.files.dir}/CommonVersion.jar" file="${build.dir}/common/CommonVersion.jar" />
+    <property name="classes.tools.dir" location="${BuildServer-class.dir}/tools" />
+    <copy todir="${classes.tools.dir}">
+      <fileset dir="${lib.dir}/android/tools" includes="*/aapt" />
+    </copy>
+    <chmod dir="${classes.tools.dir}" includes="*/aapt" perm="ugo+rx"/>
+    <copy todir="${classes.tools.dir}">
+      <fileset dir="${lib.dir}/android/tools" includes="*/zipalign" />
+    </copy>
+    <chmod dir="${classes.tools.dir}" includes="*/zipalign" perm="ugo+rx"/>
+
+    <!-- jar up the classes and resource files -->
+    <jar destfile="${run.lib.dir}/BuildServer.jar" filesonly="true">
+      <fileset dir="${BuildServer-class.dir}" />
+    </jar>
+  </target>
+
+  <!-- =====================================================================
+       CopyToRunLibDir: creates the build/run/lib directory and copies jars
+                        needed to compile the build server classes
+       ===================================================================== -->
+  <target name="CopyToRunLibDir"
+          depends="init,common_CommonUtils,common_CommonVersion">
+    <mkdir dir="${run.lib.dir}" />
+    <copy todir="${run.lib.dir}" flatten="true">
+      <fileset dir="${local.lib.dir}" includes="*.jar"/>
+      <fileset dir="${build.dir}" includes="common/CommonUtils.jar" />
+      <fileset dir="${build.dir}" includes="common/CommonVersion.jar" />
+      <fileset dir="${lib.dir}" includes="bouncycastle/bcprov-jdk15on-149.jar"/>
+      <fileset dir="${lib.dir}" includes="bouncycastle/bcpkix-jdk15on-149.jar"/>
+      <fileset dir="${lib.dir}" includes="android/tools/sdklib.jar"/>
+      <fileset dir="${lib.dir}" includes="guava/guava-14.0.1.jar"/>
+      <fileset dir="${lib.dir}" includes="commons-io/commons-io-2.0.1.jar"/>
+      <fileset dir="${lib.dir}" includes="args4j/args4j-2.0.18.jar"/>
+      <fileset dir="${lib.dir}" includes="json/json.jar" />
+    </copy>
+  </target>
+
+
+  <!-- =====================================================================
+       Checks to see if a debug.keystore file exists in the invoker's
+       home directory (in the .appinventor subdirectory)
+       ===================================================================== -->
+  <target name="CheckKeystore"
+          depends="init">
+    <available file="${user.home}/.appinventor/debug.keystore"
+               property="keystore.exists" />
+  </target>
+
+  <!-- =====================================================================
+       Creates a personal DEBUG keystore in the invoker's .appinventor
+       subdirectory.
+       ===================================================================== -->
+
+  <target name="MakeKeyStore"
+          depends="init,CheckKeystore" unless="${keystore.exists}">
+    <mkdir dir="${user.home}/.appinventor" />
+    <genkey alias="androidkey" dname="CN=Android Debug, O=Android, C=US" storepass="android"
+            keystore="${user.home}/.appinventor/debug.keystore" keyalg="rsa"
+            validity="10000" />
+  </target>
+
+  <!-- =====================================================================
+       GenPlayAppSrcZip Version for the Google Play Store works over WiFi
+       ===================================================================== -->
+  <target name="__GenPlayAppSrcZip"
+          depends="init,MakeKeyStore">
+    <copy tofile="${appinventor.dir}/aiplayapp/android.keystore" file="${user.home}/.appinventor/debug.keystore" />
+    <zip destfile="${local.build.dir}/aiplayapp.zip" basedir="${appinventor.dir}/aiplayapp" filesonly="true"
+         includes="src/**/*,youngandroidproject/*,assets/*,android.keystore" />
+    <!-- We delete the keyfile below so as to not leave it laying around the source
+         tree -->
+    <delete file="${appinventor.dir}/aiplayapp/android.keystore" failonerror="true" />
+  </target>
+
+  <target name="GenPlayAppSrcZip"
+          depends="init">
+    <!-- Note that if you want to pre-generate an android.keystore file for use in signing the
+         AppInventorDebugApp.apk (i.e. the stem cell app) you should put that file in the
+         ${appinventor.dir}/aiplayapp directory and add 'android.keystore' to the includes
+         list below.
+
+         Hossein: added my AppInventor (AppyBuilder) keystore that was downloaded from
+         silver.appybuilder.com in folder below and added into includes.
+         This way, I should be able to reuse the same keystore all the time
+      -->
+    <zip destfile="${local.build.dir}/aiplayapp.zip" basedir="${appinventor.dir}/aiplayapp" filesonly="true"
+         includes="src/**/*,youngandroidproject/*,assets/*,android.keystore" />
+  </target>
+
+  <!-- =====================================================================
+       CheckPlayApp: Sets the PlayApp.uptodate property to true if
+                        the starter app needs to be rebuilt. This can happen
+                        if the starter app source files have changed, or if
+                        any of the build server jars have changed.
+       ===================================================================== -->
+  <target name="CheckPlayApp"
+          depends="GenPlayAppSrcZip,BuildServer">
+    <uptodate property="PlayApp.uptodate" targetfile="${public.build.dir}/AppyBuilder.apk">
+      <srcfiles file="${local.build.dir}/aiplayapp.zip"/>
+      <srcfiles dir="${run.lib.dir}" includes="*.jar"/>
+    </uptodate>
+  </target>
+
+  <!-- =====================================================================
+       PlayApp: builds ../build/buildserver/AppyBuilderCompanion.apk
+       ===================================================================== -->
+  <target name="PlayApp"
+          depends="CheckPlayApp"
+          unless="PlayApp.uptodate">
+    <java classname="com.google.appinventor.buildserver.Main" fork="true" failonerror="true">
+      <classpath>
+        <fileset dir="${run.lib.dir}" includes="*.jar" />
+      </classpath>
+      <sysproperty key="file.encoding" value="UTF-8" />
+      <arg value="--childProcessRamMb" />
+      <arg value="1024" />
+      <arg value="--inputZipFile" />
+      <arg value="${local.build.dir}/aiplayapp.zip" />
+      <arg value="--userName" />
+      <arg value="AppyBuilder" />
+      <arg value="--isForCompanion" />
+      <arg value="--outputDir" />
+      <arg value="${public.build.dir}" />
+      <arg value="--dexCacheDir" />
+      <arg value="${public.build.dir}/dexCache" />
+    </java>
+  </target>
+
+  <!-- =====================================================================
+       Install the Companion on a connected phone.
+       ===================================================================== -->
+
+  <target name="installplay"
+          depends="PlayApp">
+    <exec executable="adb" failonerror="false">
+      <arg line="uninstall com.appybuilder.companiongold" />
+    </exec>
+    <exec executable="adb" failonerror="true">
+      <arg line='install "${public.build.dir}/AppyBuilder.apk"' />
+    </exec>
+  </target>
+
+  <!-- =====================================================================
+       RunLocalBuildServer: Runs the build server
+       ===================================================================== -->
+  <target name="RunLocalBuildServer"
+          depends="BuildServer">
+    <java classname="com.google.appinventor.buildserver.BuildServer" fork="true" failonerror="true">
+      <classpath>
+        <fileset dir="${run.lib.dir}" includes="*.jar" />
+      </classpath>
+      <sysproperty key="file.encoding" value="UTF-8" />
+      <arg value="--dexCacheDir" />
+      <arg value="${public.build.dir}/dexCache" />
+      <arg value="--shutdownToken" />
+      <arg value="token" />
+    </java>
+  </target>
+
+  <!-- =====================================================================
+       RunMain:
+       Use a command like the following to build a single APK from a ZIP:
+       ant RunMain -Dzip.file=$HOME/MyDownloads/ImageUpload.zip \
+       -Duser.name=$USER -Doutput.dir=.
+       ===================================================================== -->
+  <target name="RunMain"
+          depends="BuildServer">
+    <java classname="com.google.appinventor.buildserver.Main" fork="true" failonerror="true">
+      <classpath>
+        <fileset dir="${run.lib.dir}" includes="*.jar" />
+      </classpath>
+      <sysproperty key="file.encoding" value="UTF-8" />
+      <arg value="--inputZipFile" />
+      <arg value="${zip.file}" />
+      <arg value="--userName" />
+      <arg value="${user.name}" />
+      <arg value="--outputDir" />
+      <arg value="${output.dir}" />
+      <arg value="--dexCacheDir" />
+      <arg value="${public.build.dir}/dexCache" />
+    </java>
+  </target>
+
+  <!-- =====================================================================
+       BuildDeploymentTar: produces ../build/buildserver/BuildServer.tar
+       ===================================================================== -->
+  <target name="BuildDeploymentTar"
+          depends="BuildServer">
+    <tar destfile="${public.build.dir}/BuildServer.tar">
+      <fileset dir="${run.dir}" includes="lib/*.jar" />
+    </tar>
+  </target>
+
+  <!-- =====================================================================
+       BuildServerTests: build and run the BuildServer tests and generate the output results
+       ===================================================================== -->
+
+  <path id="libsForBuildServerTests.path">
+    <fileset dir="${run.lib.dir}" includes="*.jar"/>
+    <pathelement location="${build.dir}/common/CommonTestUtils.jar" />
+    <pathelement location="${build.dir}/components/AndroidRuntime.jar"/>
+    <pathelement location="${lib.dir}/kawa/kawa-1.11-modified.jar" />
+    <pathelement location="${lib.dir}/guava/guava-14.0.1.jar" />
+    <pathelement location="${lib.dir}/commons-io/commons-io-2.0.1.jar" />
+    <pathelement location="${lib.dir}/json/json.jar" />
+    <pathelement location="${lib.dir}/junit/junit-4.8.2.jar" />
+  </path>
+
+  <path id="BuildServerTests.path">
+    <path refid="libsForBuildServerTests.path"/>
+    <pathelement location="${local.build.dir}/BuildServerTests.jar" />
+  </path>
+
+  <target name="BuildServerTests"
+          depends="common_CommonTestUtils,components_AndroidRuntime,BuildServer"
+          description="build and run the test suite" >
+    <ai.dojunit aij-testingtarget="BuildServerTests"
+                aij-dir="${buildserver.pkg}/" >
+    </ai.dojunit>
+  </target>
+
+</project>

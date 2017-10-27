@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="v11">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/appengine/appengine-java-sdk-1.9.46/lib/opt/user/jsr107/v1/appengine-jsr107cache-1.9.46.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/appengine/appengine-java-sdk-1.9.46/lib/opt/user/jsr107/v1/jsr107cache-1.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="org.moxieapps.gwt.uploader-1.1.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/moxieapps/org.moxieapps.gwt.uploader-1.1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

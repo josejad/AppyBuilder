@@ -1,0 +1,572 @@
+// -*- mode: java; c-basic-offset: 2; -*-
+// Copyright 2016-2018 AppyBuilder.com, All Rights Reserved - Info@AppyBuilder.com
+// https://www.gnu.org/licenses/gpl-3.0.en.html
+
+// Copyright 2009-2011 Google, All Rights reserved
+// Copyright 2011-2012 MIT, All rights reserved
+// Released under the Apache License, Version 2.0
+// http://www.apache.org/licenses/LICENSE-2.0
+
+package com.google.appinventor.components.runtime;
+
+import android.graphics.Typeface;
+import android.util.Log;
+import com.google.appinventor.components.annotations.*;
+import com.google.appinventor.components.common.ComponentCategory;
+import com.google.appinventor.components.common.PropertyTypeConstants;
+import com.google.appinventor.components.common.YaVersion;
+import com.google.appinventor.components.runtime.util.MediaUtil;
+import com.google.appinventor.components.runtime.util.TextViewUtil;
+
+import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import java.io.IOException;
+
+/**
+ * Label containing a text string.
+ *
+ */
+@DesignerComponent(version = YaVersion.LABEL_COMPONENT_VERSION,
+    description = "A Label displays a piece of text, which is " +
+    "specified through the <code>Text</code> property.  Other properties, " +
+    "all of which can be set in the Designer or Blocks Editor, control " +
+    "the appearance and placement of the text.",
+    category = ComponentCategory.USERINTERFACE)
+@SimpleObject
+public final class Label extends AndroidViewComponent implements View.OnClickListener, View.OnLongClickListener {
+
+  // default margin around a label in DPs
+  // note that the spacing between adjacent labels will be twice this value
+  // because each label has a margin
+  private static final int DEFAULT_LABEL_MARGIN = 2;
+
+  // default margin in density-independent pixels. This must be
+  // computed using the view
+  private int defaultLabelMarginInDp = 0;
+
+  private final TextView view;
+
+  private final LinearLayout.LayoutParams linearLayoutParams;
+
+  // Backing for text alignment
+  private int textAlignment;
+
+  // Backing for background color
+  private int backgroundColor;
+
+  // Backing for font typeface
+  private int fontTypeface;
+
+  // Backing for font bold
+  private boolean bold;
+
+  // Backing for font italic
+  private boolean italic;
+
+  // Whether or not the label should have a margin
+  private boolean hasMargins;
+
+  // Backing for text color
+  private int textColor;
+    private boolean isHyperlined = false;
+    private boolean isMarquee = false;
+    private String typefaceFileName;
+  // Label Format
+  private boolean htmlFormat;
+
+    private static final String LOG_TAG = "Label";
+
+  /**
+   * Creates a new Label component.
+   *
+   * @param container  container, component will be placed in
+   */
+  public Label(ComponentContainer container) {
+    super(container);
+    view = new TextView(container.$context());
+    // Adds the component to its designated container
+    container.$add(this);
+
+    // Listen to clicks
+    view.setOnClickListener(this);
+    view.setOnLongClickListener(this);
+
+    // Get the layout parameters to use in setting margins (and potentially
+    // other things.
+    // There will be a bug if the label view does not have linear layout params.
+    // TODO(hal): Generalize this for other types of layouts
+    Object lp = view.getLayoutParams();
+    // The following instanceof check will fail if we have not previously
+    // added the label to the container (Why?)
+    if (lp instanceof LinearLayout.LayoutParams) {
+        linearLayoutParams = (LinearLayout.LayoutParams) lp;
+        defaultLabelMarginInDp = dpToPx(view, DEFAULT_LABEL_MARGIN);
+    } else {
+      defaultLabelMarginInDp = 0;
+      linearLayoutParams = null;
+      Log.e("Label", "Error: The label's view does not have linear layout parameters");
+      new RuntimeException().printStackTrace();
+    }
+
+    // Default property values
+    TextAlignment(Component.ALIGNMENT_NORMAL);
+    BackgroundColor(Component.COLOR_NONE);
+    fontTypeface = Component.TYPEFACE_DEFAULT;
+    TextViewUtil.setFontTypeface(view, fontTypeface, bold, italic);
+    FontSize(Component.FONT_DEFAULT_SIZE);
+    Text("");
+    TextColor(Component.COLOR_BLACK);
+    HTMLFormat(false);
+    HasMargins(true);
+  }
+
+  // put this in the right file
+  private static int dpToPx(View view, int dp) {
+    float density = view.getContext().getResources().getDisplayMetrics().density;
+    return Math.round((float)dp * density);
+  }
+
+  @Override
+  public View getView() {
+    return view;
+  }
+
+  /**
+   * Returns the alignment of the label's text: center, normal
+   * (e.g., left-justified if text is written left to right), or
+   * opposite (e.g., right-justified if text is written left to right).
+   *
+   * @return  one of {@link Component#ALIGNMENT_NORMAL},
+   *          {@link Component#ALIGNMENT_CENTER} or
+   *          {@link Component#ALIGNMENT_OPPOSITE}
+   */
+  @SimpleProperty(
+      category = PropertyCategory.APPEARANCE,
+      userVisible = false)
+  public int TextAlignment() {
+    return textAlignment;
+  }
+
+  /**
+   * Specifies the alignment of the label's text: center, normal
+   * (e.g., left-justified if text is written left to right), or
+   * opposite (e.g., right-justified if text is written left to right).
+   *
+   * @param alignment  one of {@link Component#ALIGNMENT_NORMAL},
+   *                   {@link Component#ALIGNMENT_CENTER} or
+   *                   {@link Component#ALIGNMENT_OPPOSITE}
+   */
+  @DesignerProperty(editorType = PropertyTypeConstants.PROPERTY_TYPE_TEXTALIGNMENT,
+      defaultValue = Component.ALIGNMENT_NORMAL + "")
+  @SimpleProperty(
+      userVisible = false)
+  public void TextAlignment(int alignment) {
+    this.textAlignment = alignment;
+    TextViewUtil.setAlignment(view, alignment, false);
+  }
+
+  @SimpleFunction(description = "Place a blurred shadow of text underneath the text, drawn with the specified x, y, radius, color (e.g. -11, 12, 13, black ")
+  public void SetShadow(float x, float y, float radius, int color) {
+    TextViewUtil.setShadow(view, x, y, radius, color);
+  }
+
+  /**
+   * Returns the label's background color as an alpha-red-green-blue
+   * integer.
+   *
+   * @return  background RGB color with alpha
+   */
+  @SimpleProperty(
+      category = PropertyCategory.APPEARANCE)
+  public int BackgroundColor() {
+    return backgroundColor;
+  }
+
+  /**
+   * Specifies the label's background color as an alpha-red-green-blue
+   * integer.
+   *
+   * @param argb  background RGB color with alpha
+   */
+  @DesignerProperty(editorType = PropertyTypeConstants.PROPERTY_TYPE_COLOR,
+      defaultValue = Component.DEFAULT_VALUE_COLOR_NONE)
+  @SimpleProperty
+  public void BackgroundColor(int argb) {
+    backgroundColor = argb;
+    if (argb != Component.COLOR_DEFAULT) {
+      TextViewUtil.setBackgroundColor(view, argb);
+    } else {
+      TextViewUtil.setBackgroundColor(view, Component.COLOR_NONE);
+    }
+  }
+
+  /**
+   * Returns true if the label's text should be bold.
+   * If bold has been requested, this property will return true, even if the
+   * font does not support bold.
+   *
+   * @return  {@code true} indicates bold, {@code false} normal
+   */
+  @SimpleProperty(
+      category = PropertyCategory.APPEARANCE,
+      userVisible = false)
+  public boolean FontBold() {
+    return bold;
+  }
+
+  /**
+   * Specifies whether the label's text should be bold.
+   * Some fonts do not support bold.
+   *
+   * @param bold  {@code true} indicates bold, {@code false} normal
+   */
+  @DesignerProperty(editorType = PropertyTypeConstants.PROPERTY_TYPE_BOOLEAN,
+      defaultValue = "False")
+  @SimpleProperty(
+      userVisible = false)
+  public void FontBold(boolean bold) {
+    this.bold = bold;
+    TextViewUtil.setFontTypeface(view, fontTypeface, bold, italic);
+  }
+
+  /**
+   * Returns true if the label's text should be italic.
+   * If italic has been requested, this property will return true, even if the
+   * font does not support italic.
+   *
+   * @return  {@code true} indicates italic, {@code false} normal
+   */
+  @SimpleProperty(
+      category = PropertyCategory.APPEARANCE,
+      userVisible = false)
+  public boolean FontItalic() {
+    return italic;
+  }
+
+  /**
+   * Specifies whether the label's text should be italic.
+   * Some fonts do not support italic.
+   *
+   * @param italic  {@code true} indicates italic, {@code false} normal
+   */
+  @DesignerProperty(editorType = PropertyTypeConstants.PROPERTY_TYPE_BOOLEAN,
+      defaultValue = "False")
+  @SimpleProperty(
+      userVisible = false)
+  public void FontItalic(boolean italic) {
+    this.italic = italic;
+    TextViewUtil.setFontTypeface(view, fontTypeface, bold, italic);
+  }
+
+  /**
+   * Returns true if the label should have  margins.
+   *
+   * @return  {@code true} indicates margins, {@code false} no margins
+   */
+  @SimpleProperty(
+      category = PropertyCategory.APPEARANCE,
+      description = "Reports whether or not the label appears with margins.  All four "
+      + "margins (left, right, top, bottom) are the same.  This property has no effect "
+      + "in the designer, where labels are always shown with margins.",
+      userVisible = true)
+  public boolean HasMargins() {
+    return hasMargins;
+  }
+
+  /**
+   * Specifies whether the label should have margins.
+   * This margin value is not well coordinated with the
+   * designer, where the margins are defined for the arrangement, not just for individual
+   * labels.
+   *
+   * @param hasMargins {@code true} indicates that there are margins, {@code false} no margins
+   */
+  @DesignerProperty(editorType = PropertyTypeConstants.PROPERTY_TYPE_BOOLEAN,
+      defaultValue = "True")
+  @SimpleProperty(
+      userVisible = true)
+  public void HasMargins(boolean hasMargins) {
+    this.hasMargins = hasMargins;
+    setLabelMargins(hasMargins);
+  }
+
+private void setLabelMargins(boolean hasMargins) {
+  int m = hasMargins ? defaultLabelMarginInDp : 0 ;
+  linearLayoutParams.setMargins(m, m, m, m);
+  view.invalidate();
+}
+
+  /**
+   * Returns the label's text's font size, measured in sp(scale-independent pixels).
+   *
+   * @return  font size in sp(scale-independent pixels).
+   */
+  @SimpleProperty(
+      category = PropertyCategory.APPEARANCE)
+  public float FontSize() {
+    return TextViewUtil.getFontSize(view, container.$context());
+  }
+
+  /**
+   * Specifies the label's text's font size, measured in sp(scale-independent pixels).
+   *
+   * @param size  font size in sp (scale-independent pixels)
+   */
+  @DesignerProperty(editorType = PropertyTypeConstants.PROPERTY_TYPE_NON_NEGATIVE_FLOAT,
+      defaultValue = Component.FONT_DEFAULT_SIZE + "")
+  @SimpleProperty
+  public void FontSize(float size) {
+    TextViewUtil.setFontSize(view, size);
+  }
+
+  /**
+   * Returns the label's text's font face as default, serif, sans
+   * serif, or monospace.
+   *
+   * @return  one of {@link Component#TYPEFACE_DEFAULT},
+   *          {@link Component#TYPEFACE_SERIF},
+   *          {@link Component#TYPEFACE_SANSSERIF} or
+   *          {@link Component#TYPEFACE_MONOSPACE}
+   */
+  @SimpleProperty(
+      category = PropertyCategory.APPEARANCE,
+      userVisible = false)
+  public int FontTypeface() {
+    return fontTypeface;
+  }
+
+  /**
+   * Specifies the label's text's font face as default, serif, sans
+   * serif, or monospace.
+   *
+   * @param typeface  one of {@link Component#TYPEFACE_DEFAULT},
+   *                  {@link Component#TYPEFACE_SERIF},
+   *                  {@link Component#TYPEFACE_SANSSERIF} or
+   *                  {@link Component#TYPEFACE_MONOSPACE}
+   */
+  @DesignerProperty(editorType = PropertyTypeConstants.PROPERTY_TYPE_TYPEFACE,
+      defaultValue = Component.TYPEFACE_DEFAULT + "")
+  @SimpleProperty(
+      userVisible = false)
+  public void FontTypeface(int typeface) {
+    fontTypeface = typeface;
+    TextViewUtil.setFontTypeface(view, fontTypeface, bold, italic);
+  }
+
+  /**
+   * Returns the text displayed by the label.
+   *
+   * @return  label caption
+   */
+  @SimpleProperty(
+      category = PropertyCategory.APPEARANCE)
+  public String Text() {
+    return TextViewUtil.getText(view);
+  }
+
+  /**
+   * Specifies the text displayed by the label.
+   * If you like to make the text hyperlinked, use Hyperlinked property
+   *
+   * @param text  new caption for label
+   */
+  @DesignerProperty(editorType = PropertyTypeConstants.PROPERTY_TYPE_TEXTAREA,
+          defaultValue = "")
+  @SimpleProperty
+  public void Text(String text) {
+    view.setTransformationMethod(null);
+    if (htmlFormat) {
+      TextViewUtil.setTextHTML(view, text);
+    } else  if (isHyperlined) {
+      TextViewUtil.setTextHyperlinked(view, text);
+    } else {
+      TextViewUtil.setText(view, text);
+    }
+
+    if (isMarquee) {
+      TextViewUtil.setMarque(view, isMarquee);
+    }
+    //else {
+//          //This will stop the marquee
+//          view.setMarqueeRepeatLimit(0); //disable it
+//      }
+  }
+
+  /**
+   * Returns the label's text's format
+   *
+   * @return {@code true} indicates that the label format is html text
+   *         {@code false} lines that the label format is plain text
+   */
+  @SimpleProperty(
+      category = PropertyCategory.APPEARANCE,
+      description = "If true, then this label will show html text else it " +
+      "will show plain text. Note: Not all HTML is supported.")
+  public boolean HTMLFormat() {
+    return htmlFormat;
+  }
+
+  /**
+   * Specifies the label's text's format
+   *
+   * @return {@code true} indicates that the label format is html text
+   *         {@code false} lines that the label format is plain text
+   */
+  @DesignerProperty(editorType = PropertyTypeConstants.PROPERTY_TYPE_BOOLEAN,
+      defaultValue = "False")
+  @SimpleProperty(userVisible = false)
+  public void HTMLFormat(boolean fmt) {
+    htmlFormat = fmt;
+    if (htmlFormat) {
+      String txt = TextViewUtil.getText(view);
+      TextViewUtil.setTextHTML(view, txt);
+    } else {
+      String txt = TextViewUtil.getText(view);
+      TextViewUtil.setText(view, txt);
+    }
+  }
+
+  /**
+   * Returns the label's text color as an alpha-red-green-blue
+   * integer.
+   *
+   * @return  text RGB color with alpha
+   */
+  @SimpleProperty(
+      category = PropertyCategory.APPEARANCE)
+  public int TextColor() {
+    return textColor;
+  }
+
+  /**
+   * Specifies the label's text color as an alpha-red-green-blue
+   * integer.
+   *
+   * @param argb  text RGB color with alpha
+   */
+  @DesignerProperty(editorType = PropertyTypeConstants.PROPERTY_TYPE_COLOR,
+      defaultValue = Component.DEFAULT_VALUE_COLOR_BLACK)
+  @SimpleProperty
+  public void TextColor(int argb) {
+    textColor = argb;
+    if (argb != Component.COLOR_DEFAULT) {
+      TextViewUtil.setTextColor(view, argb);
+    } else {
+      TextViewUtil.setTextColor(view, Component.COLOR_BLACK);
+    }
+  }
+
+    /**
+     * Indicates if the text has to allow for hyperlinks. When set to try all text
+     * that can be hyperlinked will be linkable. Examples are web URLs, phone numbers, email addresses
+     * @param enabled  {@code true} for enabled, {@code false} disabled
+     */
+    @DesignerProperty(editorType = PropertyTypeConstants.PROPERTY_TYPE_BOOLEAN, defaultValue = "False")
+    @SimpleProperty
+    public void Hyperlinked(boolean enabled)
+    {
+        this.isHyperlined = enabled;
+        Text(Text());
+    }
+
+    /**
+     * Indicates if hyperlinks are set for this component
+     * @return  {@code true} indicates enabled, {@code false} disabled
+     */
+    @SimpleProperty(category = PropertyCategory.BEHAVIOR)
+    public boolean Hyperlinked()
+    {
+        return isHyperlined;
+    }
+
+    /**
+     * javadoc here
+     * @param enabled  {@code true} for enabled, {@code false} disabled
+     */
+    @DesignerProperty(editorType = PropertyTypeConstants.PROPERTY_TYPE_BOOLEAN, defaultValue = "False")
+    @SimpleProperty
+    public void MarqueeEnabled(boolean enabled)
+    {
+        this.isMarquee = enabled;
+        Text(Text());
+    }
+
+    /**
+     * Indicates if Marquee are set for this component
+     * @return  {@code true} indicates enabled, {@code false} disabled
+     */
+    @SimpleProperty(category = PropertyCategory.BEHAVIOR)
+    public boolean MarqueeEnabled()
+    {
+        return isMarquee;
+    }
+
+    /**
+     * Specifies the typeface to be used. Type typeface file should've been up uploaded
+     *
+     * @param fontFileName  type uploaded typeface file
+     */
+    @DesignerProperty(editorType = PropertyTypeConstants.PROPERTY_TYPE_ASSET,
+            defaultValue = "")
+    @SimpleProperty
+    public void FontTypefaceCustom(String fontFileName) {
+        if (fontFileName == null || fontFileName.isEmpty()) {
+            return;
+        }
+
+        Typeface localTypeface1 = null;
+        try {
+            localTypeface1 = Typeface.createFromFile(MediaUtil.getMediaFile(container.$form(), fontFileName));
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "Unable to load your font: " + fontFileName);
+            return;
+        }
+        if (localTypeface1 != null) {
+            view.setTypeface(localTypeface1);
+            typefaceFileName = fontFileName;
+        }
+    }
+
+    /**
+     * Returns the name of current typeface file name that is used
+     *
+     * @return  {@code true} indicates italic, {@code false} normal
+     */
+    @SimpleProperty(
+            description = "The name of current typeface file name that is used",
+            category = PropertyCategory.APPEARANCE)
+    public String FontTypefaceCustom() {
+        return typefaceFileName;
+    }
+
+ /**
+   * Indicates a user has long clicked on the button.
+   */
+  @SimpleEvent(description = "User held the component down.")
+  public boolean LongClick() {
+    return EventDispatcher.dispatchEvent(this, "LongClick");
+  }
+
+  /**
+   * Indicates a user has clicked on the button.
+   */
+  @SimpleEvent(description = "User tapped and released the component.")
+  public void Click() {
+    EventDispatcher.dispatchEvent(this, "Click");
+  }
+
+  @Override
+  public void onClick(View view) {
+    Click();
+  }
+
+  @Override
+  public boolean onLongClick(View view) {
+    // Call the users Click event handler. Note that we distinguish the longclick() abstract method
+    // implementation from the LongClick() event handler method.
+       return LongClick();
+  }
+}

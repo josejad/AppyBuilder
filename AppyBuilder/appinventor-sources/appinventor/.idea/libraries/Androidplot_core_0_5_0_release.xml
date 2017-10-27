@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Androidplot-core-0.5.0-release">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/chart/Androidplot-core-0.5.0-release.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="tools">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/android/tools/ddmlib_2.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/android/tools/dx.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/android/tools/ddmlib.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/android/tools/sdklib.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

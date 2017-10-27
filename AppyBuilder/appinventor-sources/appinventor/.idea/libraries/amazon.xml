@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="amazon">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/amazon/amazon-ads-5.4.78.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/amazon/amazon-ads-5.8.1.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

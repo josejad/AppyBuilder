@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="admob">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/admob/google-play-services-location.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/admob/google-play-services - Copy.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/admob/google-play-services.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/admob/google-play-services-light.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/admob/GoogleAdMobAdsSdk-6.4.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/admob/google-play-services-maps.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/admob/google-play-servicesTheCheckedInFile.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="image">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/image/round-image2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/image/metadata-extractor-2.8.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/image/circle-image-view.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

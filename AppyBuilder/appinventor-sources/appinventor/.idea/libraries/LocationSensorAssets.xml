@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="LocationSensorAssets">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/docs/reference/other/LocationSensorAssets/LocationTest.zip!/" />
+      <root url="jar://$PROJECT_DIR$/docs/reference/other/LocationSensorAssets/LocationOnClickTest.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

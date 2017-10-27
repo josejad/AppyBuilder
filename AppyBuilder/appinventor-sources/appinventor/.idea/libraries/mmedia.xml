@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="mmedia">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/monetization/mmedia/MMSDK.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/monetization/mmedia/nmdp_speech_kit.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/monetization/mmedia/New_MMSDK.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/monetization/mmedia/MMSDK_ORIG.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

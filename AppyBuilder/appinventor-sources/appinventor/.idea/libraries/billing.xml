@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="billing">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/billing/massie-iab3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/billing/anjlab-iabv3-current.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/billing/appybuilder-billing3-1.0.32.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

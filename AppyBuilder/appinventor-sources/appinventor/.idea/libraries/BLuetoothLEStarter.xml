@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="BLuetoothLEStarter">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/appengine/war/templates/BLuetoothLEStarter/BLuetoothLEStarter.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

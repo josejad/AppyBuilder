@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="animation">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/animation/spinkit.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/animation/listviewanimations.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
