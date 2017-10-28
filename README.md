@@ -4,11 +4,12 @@
 
 ## Introduction
 
-Learn more about [AppyBuilder here:](http://helpAppyBuilder.com) or here: http://Community.AppyBuilder.com
+Learn more about [AppyBuilder here:](http://help.AppyBuilder.com) or here: http://Community.AppyBuilder.com
 
-AppyBuilder provides ability to design and build mobile apps (currently Android) with little or no coding skills!
+Using blocks, AppyBuilder provides you ability to design and build mobile apps (currently Android) with little or no coding skills!
+<img src="https://help.appybuilder.com/assets/tutRatingBar3.png" alt="" />
 
-This code is tested and known to work with Java 7.
+If you like to jump into building apps, just follow link here: http://gold.AppyBuilder.com
 
 ## Contributors
 The best way to go about integrating changes in AppyBuilder is to start a conversation in the [community forum](https://community.AppyBuilder.com) about whatever you intend to change or add.
