@@ -1,11 +1,11 @@
+// Copyright 2016-2018 AppyBuilder.com, All Rights Reserved - Info@AppyBuilder.com
+// https://www.gnu.org/licenses/gpl-3.0.en.html
 package com.google.appinventor.client.editor.simple.components;
 
 import com.google.appinventor.client.editor.simple.SimpleEditor;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-//import com.google.gwt.user.client.ui.ToggleButton;
-// http://www.gwtproject.org/javadoc/latest/index.html?com/google/gwt/user/client/ui/package-summary.html
 
 /**
  * Mock Toggler component.

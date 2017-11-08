@@ -72,12 +72,10 @@ public class FirebaseDB extends AndroidNonvisibleComponent implements Component 
 
   private static final String LOG_TAG = "Firebase";
   private String firebaseURL = null;
-//  private String defaultURL = "https://Amerkashi.firebaseio.com/";
-//  private boolean useDefault = true;
   private String developerBucket;
   private String projectBucket;
 //  private static final String MY_FIREBASE_URL = "https://Amerkashi.firebaseio.com/";
-  private static final String MY_FIREBASE_URL = "https://appybuilder-5762b.firebaseio.com/";
+  private static final String MY_FIREBASE_URL = "https://xxx.firebaseio.com/";
 
   private String firebaseToken;
   // Note: The two variables below are static because the systems they
@@ -265,20 +263,6 @@ public class FirebaseDB extends AndroidNonvisibleComponent implements Component 
     defaultValue = MY_FIREBASE_URL)
   @SimpleProperty(description = "Sets the URL for this FirebaseDB.")
   public void FirebaseURL(String url) {
-//    if (url.equals("DEFAULT")) {
-//      if (!useDefault) {        // If we weren't setup for the default
-//        useDefault = true;
-//        if (defaultURL == null) { // Not setup yet
-//          Log.d(LOG_TAG, "FirebaseURL called before DefaultURL (should not happen!)");
-//        } else {
-//          firebaseURL = defaultURL;
-//          resetListener();
-//        }
-//      } else {
-//        firebaseURL = defaultURL; // Should already be the case
-//      }
-//    } else {
-//      useDefault = false;
       url = url + (url.endsWith("/") ? "" : "/");
 
       if (firebaseURL.equals(url)) {

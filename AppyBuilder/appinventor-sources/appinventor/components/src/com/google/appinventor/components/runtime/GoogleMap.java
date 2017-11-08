@@ -84,8 +84,6 @@ import gnu.math.IntNum;
 public class GoogleMap extends AndroidViewComponent implements OnResumeListener, OnInitializeListener, OnPauseListener,
         OnMarkerClickListener, OnInfoWindowClickListener, OnMarkerDragListener, OnMapClickListener,
         OnMapLongClickListener, OnCameraChangeListener, LocationListener
-//        , ConnectionCallbacks
-//        , OnConnectionFailedListener
         , GoogleApiClient.ConnectionCallbacks
         , GoogleApiClient.OnConnectionFailedListener
     , OnMapReadyCallback
@@ -94,12 +92,6 @@ public class GoogleMap extends AndroidViewComponent implements OnResumeListener,
     private final Form form;
     private static final String TAG = "GoogleMap";
     private GoogleMap googleMap;
-    // Layout
-    // We create thie LinerLayout and add our mapFragment in it.
-    // private final com.google.appinventor.components.runtime.LinearLayout viewLayout;
-    // private final FrameLayout viewLayout;
-    // private final android.widget.LinearLayout viewLayout;
-    // private LinearLayout viewLayout;
     private android.widget.LinearLayout viewLayout;
     private GoogleApiClient mGoogleApiClient;
 
@@ -188,20 +180,7 @@ public class GoogleMap extends AndroidViewComponent implements OnResumeListener,
 
         checkGooglePlayServiceSDK() ;
         checkGoogleMapInstalled() ;
-//        mMapFragment = ((SupportMapFragment)this.form.getSupportFragmentManager().findFragmentByTag(this.MAP_FRAGMENT_TAG));
-//        if (mMapFragment == null)
-//        {
-//            this.mMapFragment = SupportMapFragment.newInstance();
-//            FragmentTransaction localFragmentTransaction = this.form.getSupportFragmentManager().beginTransaction();
-//            localFragmentTransaction.replace(this.viewLayout.getId(), this.mMapFragment, this.MAP_FRAGMENT_TAG);
-//            localFragmentTransaction.commit();
-//        }
 
-//        if (googleMap == null) {
-//            MapFragment mapFragment = new com.google.android.gms.maps.MapFragment();
-//            googleMap = ((MapFragment) form.getFragmentManager().
-//                    findFragmentById(R.id.map)).getMap();
-//        }
         // TODO: need to add code to check Form (activity) whether savedInstanceState ==null
         mMapFragment = (MapFragment) form.getFragmentManager().findFragmentByTag(MAP_FRAGMENT_TAG);
 
@@ -327,11 +306,6 @@ public class GoogleMap extends AndroidViewComponent implements OnResumeListener,
         mMap.setOnInfoWindowClickListener(this);
         mMap.setOnMarkerDragListener(this);
 
-        //just for testing
-//    int uniqueId = generateMarkerId();
-//    Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
-//    markers.put(marker, uniqueId);
-        //////
         // create UiSetting instance and default ui settings of the map
         setupUiSettings();
 
