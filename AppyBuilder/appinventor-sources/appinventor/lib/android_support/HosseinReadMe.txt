@@ -1,1 +1,0 @@
-This support lib file contains both v4 and v7 libriaries
