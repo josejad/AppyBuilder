@@ -1,10 +1,7 @@
+// Copyright 2016-2018 AppyBuilder.com, All Rights Reserved - Info@AppyBuilder.com
+// https://www.gnu.org/licenses/gpl-3.0.en.html
+
 package com.google.appinventor.components.runtime;
-
-//hossein: check following to implement light sensor
-//   http://developer.samsung.com/android/technical-docs/Developing-Android-Application-Using-Atmospheric-Pressure-Sensor
-
-
-
 
 import android.content.Context;
 import android.hardware.Sensor;

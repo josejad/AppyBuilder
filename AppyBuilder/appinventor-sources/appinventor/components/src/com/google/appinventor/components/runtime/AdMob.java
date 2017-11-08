@@ -1,3 +1,6 @@
+// Copyright 2016-2018 AppyBuilder.com, All Rights Reserved - Info@AppyBuilder.com
+// https://www.gnu.org/licenses/gpl-3.0.en.html
+
 package com.google.appinventor.components.runtime;
 // See/download all the google play services versions: http://www.smorgasbork.com/2015/01/05/google-play-services-sdk-version-history
 // Use this to package the app and to get the google-play-service from target or from .apk

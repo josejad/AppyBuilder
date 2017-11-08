@@ -1,7 +1,7 @@
-package com.google.appinventor.components.runtime;
+// Copyright 2016-2018 AppyBuilder.com, All Rights Reserved - Info@AppyBuilder.com
+// https://www.gnu.org/licenses/gpl-3.0.en.html
 
-//See here: https://developer.amazon.com/public/apis/earn/mobile-ads/docs/event-tracking-and-errors
-// https://developer.amazon.com/blog/tag/Interstitial+Ads.html
+package com.google.appinventor.components.runtime;
 
 import android.util.Log;
 import com.amazon.device.ads.*;

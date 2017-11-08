@@ -1,5 +1,8 @@
 package com.google.appinventor.components.runtime;
 
+// Copyright 2016-2018 AppyBuilder.com, All Rights Reserved - Info@AppyBuilder.com
+// https://www.gnu.org/licenses/gpl-3.0.en.html
+
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.view.View;

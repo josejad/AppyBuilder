@@ -67,9 +67,6 @@ public final class YandexTranslate extends AndroidNonvisibleComponent {
     // Set up the Yandex.Translate Tagline in the 'About' screen
     form.setYandexTranslateTagline();
 
-    // TODO (user) To provide users with this component you will need to obtain a key with the
-    // Yandex.Translate service at http://api.yandex.com/translate/
-//      Yandex_API_Key = "Yandex_API_Key";
     activity = container.$context();
   }
 

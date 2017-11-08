@@ -1,18 +1,8 @@
-// See commit I6eda0a2a7ad95e3257cb820acb6609e76fc4c124 for adding annotaions
+// Copyright 2016-2018 AppyBuilder.com, All Rights Reserved - Info@AppyBuilder.com
+// https://www.gnu.org/licenses/gpl-3.0.en.html
+
 
 package com.google.appinventor.components.runtime;
-// BroadcastReceiver: http://codetheory.in/android-broadcast-receivers/
-//http://codetheory.in/android-intent-filters/
-// services: http://codetheory.in/?s=service
-// ** Firebase background service code: https://gist.github.com/vikrum/6170193
-// Use Google Cloud Platform Live?? https://www.youtube.com/embed/aCK_1sq6Dl0?start=15414
-// search: https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=android%20firebase%20service
-//     https://www.firebase.com/blog/2015-10-01-firebase-android-app-engine-tutorial.html
-
-// http://www.vogella.com/tutorials/AndroidServices/article.html
-// http://www.vogella.com/tutorials/AndroidBroadcastReceiver/article.html
-// See this: https://www.simplifiedcoding.net/firebase-cloud-messaging-tutorial-android/
-
 
 import android.app.*;
 import android.content.Context;
@@ -41,8 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-// https://github.com/firebase/quickstart-android/tree/master/messaging
-
 @DesignerComponent(version = YaVersion.PUSH_NOTIFICATION_COMPONENT_VERSION,
         description = "This is a messaging solution that lets you reliably deliver messages to all client apps. " +
                 "Using this component, you can notify a client app that new email or other data is available to sync. " +
@@ -64,8 +52,7 @@ public class PushNotification extends AndroidNonvisibleComponent implements Comp
 
     private final Activity activity;
     private String pushTitle = "Notification";
-//    private String MY_FIREBASE_URL = "https://Amerkashi.firebaseio.com/";
-    private String MY_FIREBASE_URL = "https://appybuilder-5762b.firebaseio.com/";
+    private String MY_FIREBASE_URL = "https://xyz.firebaseio.com/";
     private String listenToPushUrl;
     private String listenToPushPath;
     private int vCode=1;
@@ -81,29 +68,17 @@ public class PushNotification extends AndroidNonvisibleComponent implements Comp
         listenToPushPath = ""; // given a dynamic default value in the Designer
         listenToPushUrl = MY_FIREBASE_URL;
         FirebaseURL(listenToPushUrl);
-//        VersionCode(vCode);
-//        container.$form().registerForOnPause(this);
-
-        // Start the background Firebase activity
     }
 
 
-    //todo: Should I somehow pass the firebase url with bucket information?
-    // how will different users use different buckets for unique pushNotif id???
     @SimpleFunction(description = "Starts subscribing (listening) to the topic in the database")
     public boolean StartSubscription() {
-
-        // implicit referencing; not recommended
-//        Intent intentService = new Intent(PushNotificationService.class.getName());
-//        Log.i(LOG_TAG, "Trying to pass TopicPath as:" + TopicPath());
 
         //using explicit referencing
         Intent intentService = new Intent(this.activity, PushNotificationService.class);
 
         //We need to restart the service IF running
         stopService();
-//        boolean isStopped = this.activity.stopService(intentService);
-
 
         // Pass the push path and title. The PushPath is basically a display-only entry that is:
         //      userEmail + projectName (+ version code - to be added)
@@ -111,13 +86,9 @@ public class PushNotification extends AndroidNonvisibleComponent implements Comp
         intentService.putExtra(DATABASE_URL, FirebaseURL());
         intentService.putExtra(TOPIC_PATH, TopicPath());
 
-//        intentService.putExtra(PUSH_TITLE, PushTitle());
-
         ContextWrapper contextWrapper = new ContextWrapper(this.activity.getBaseContext());
         contextWrapper.startService(intentService);
 
-        //Now start the service
-//        this.activity.startService(intentService);
         return isServiceRunning();
     }
 
@@ -137,18 +108,6 @@ public class PushNotification extends AndroidNonvisibleComponent implements Comp
 		return isServiceRunning();
 	}
 
- /*   @SimpleProperty(category = PropertyCategory.BEHAVIOR, description = "Indicates if device will be listening to topic, " +
-            "even after a device reboot")
-    public boolean ListenOnReboot() {
-        return listenOnReboot;
-    }
-
-    @DesignerProperty(editorType = PropertyTypeConstants.PROPERTY_TYPE_BOOLEAN, defaultValue = "False")
-    @SimpleProperty(description = "Use this to indicate if you want to listen to topics even after a device reboot!")
-    public void ListenOnReboot(boolean listenOnReboot) {
-        this.listenOnReboot = listenOnReboot;
-    }
-*/
     private boolean isServiceRunning() {
         ActivityManager manager = (ActivityManager) activity.getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -196,22 +155,6 @@ public class PushNotification extends AndroidNonvisibleComponent implements Comp
         Log.i(LOG_TAG, "topicPath was set as: " + topicPath);
     }
 
- /*   @DesignerProperty(editorType = PropertyTypeConstants.PROPERTY_TYPE_NON_NEGATIVE_INTEGER, defaultValue = "1")
-    public int VersionCode() {
-        // we get this from form so that we can use it for our push notification
-      return form.VersionCode();
-    }
-
-    @DesignerProperty(editorType = PropertyTypeConstants.PROPERTY_TYPE_NON_NEGATIVE_INTEGER, defaultValue = "1")
-    @SimpleProperty(userVisible = false,
-            description = "An integer value which must be incremented each time a new Android "
-                    +  "Application Package File (APK) is created for the Google Play Store.")
-    public void VersionCode(int vCode) {
-        // We don't actually need to do anything.
-        // This vCode will be used by PushNotification
-        this.vCode = vCode;
-    }
-*/
 
     /**
      * Getter for the Firebase URL.
@@ -239,25 +182,7 @@ public class PushNotification extends AndroidNonvisibleComponent implements Comp
 
     }
 
-//    @DesignerProperty(editorType = PropertyTypeConstants.PROPERTY_TYPE_TEXT, defaultValue = "Notification")
-//    @SimpleProperty(description = "Sets the title to be displayed in the notification bar")
-//    public void NotificationTitle(String pushTitle) {
-//        this.pushTitle = pushTitle;
-//    }
-//
-//    @SimpleProperty(description = "Gets the current Push Notification Title")
-//    public String PushTitle() {
-//        return this.pushTitle;
-//    }
 
-//    @Override
-//    public void onPause() {
-////        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
-////        isReceiverRegistered = false;
-//        super.onPause();
-//    }
-
-    // ==========. Make sure you use static, otherwise, runtime will throw exception because this is inner class
     public static class PushNotificationService extends Service {
         private static final String LOG_TAG = "PushNotificationService";
         private SharedPreferences sharedPreferences;
@@ -276,20 +201,13 @@ public class PushNotification extends AndroidNonvisibleComponent implements Comp
         private String ROOT_PATH = ""; //"_topic_";
         private String servicePushPath = "";
         private String servicePushUrl = "";
-//        private String listenAfterReboot = "";
 
-//        public PushNotificationService() {
-//            Log.d(LOG_TAG, "PushNotificationService 0 arg constructor called" );
-//        }
 
         @Override
         public IBinder onBind(Intent arg0) {
             return null;
         }
 
-        // called when the Service object is instantiated (ie: when the service is created).
-        // You should do things in this method that you need to do only once (ie: initialize some
-        // variables, etc.). onCreate() will only ever be called once per instantiated object.
         @Override
         public void onCreate() {
             context = getApplicationContext();
@@ -302,12 +220,6 @@ public class PushNotification extends AndroidNonvisibleComponent implements Comp
             Log.d(LOG_TAG, "onStart Started");
         }
 
-        // called every time a client starts the service using startService(Intent intent).
-        // This means that onStartCommand() can get called multiple times. You should do the things in this
-        // method that are needed each time a client requests something from your service. This depends a lot on
-        // what your service does and how it communicates with the clients (and vice-versa).
-        // If you don't implement onStartCommand() then you won't be able to get any information from the
-        // Intent that the client passes to onStartCommand() and your service might not be able to do any useful work.
         @Override
         public int onStartCommand(Intent intent, int flags, int startId) {
             // Let it continue running until it is stopped.
@@ -315,21 +227,9 @@ public class PushNotification extends AndroidNonvisibleComponent implements Comp
 
             // setup shared preferences
             ApplicationInfo applicationInfo = getApplicationInfo();
-//            Log.d(LOG_TAG, "applicationInfo,packageName:" + applicationInfo.packageName);
-//            Log.d(LOG_TAG, "applicationInfo.dataDir:" + applicationInfo.dataDir);
-//            Log.d(LOG_TAG, "applicationInfo.icon:" + applicationInfo.icon);
 
             PackageManager manager = context.getPackageManager();
             PackageInfo packageInfo = null;
-            try {
-                packageInfo = manager.getPackageInfo(context.getPackageName(), 0);
-                //This version code isn't correct because it'll give the companion vcode
-//                vCode = packageInfo.versionCode;
-            } catch (PackageManager.NameNotFoundException e) {
-//                vCode = 0;
-            }
-
-//            Log.d(LOG_TAG, "vCode:" + vCode);
 
             LOCAL_DEVICE_DB_NAME = applicationInfo.packageName;// + vCode;
             Log.d(LOG_TAG, "LOCAL_DEVICE_DB_NAME:" + LOCAL_DEVICE_DB_NAME);
@@ -343,37 +243,25 @@ public class PushNotification extends AndroidNonvisibleComponent implements Comp
                 if (extras != null && extras.containsKey(PushNotification.TOPIC_PATH)) {
                     servicePushPath = intent.getStringExtra(PushNotification.TOPIC_PATH);
                     servicePushUrl = intent.getStringExtra(PushNotification.DATABASE_URL);
-//                    Log.d(LOG_TAG, String.format("onStartCommand: pushUrl (%s), path (%s), listenOnReboot (%s)"
-//                            , servicePushUrl, servicePushPath, (listenOnReboot+"").toLowerCase()));
 
                     storeValue(TOPIC_PATH, servicePushPath);
                     storeValue(DATABASE_URL, servicePushUrl);
-//                    storeValue(LISTEN_AFTER_REBOOT, (listenOnReboot+"").toLowerCase());
-
-//            Log.d(LOG_TAG, "storage for servicePushPath:" + ROOT_PATH + getValue(servicePushPath, ""));
-
-//            pushTitle = intent.getStringExtra(PushNotification.PUSH_TITLE);
-//            pushTitle = pushTitle == null || pushTitle.trim().equals("") ? DEFAULT_TITLE : pushTitle;
-//            storeValue(PUSH_TITLE, pushTitle);
                 } else {
                     // Got intent, but extra didn't exist. This may be situation on device reboot
                     getDataFromDb();
                 }
 
-//            Log.d(LOG_TAG, "storage for title:" + getValue(pushTitle, ""));
             } else {
                 Log.d(LOG_TAG, "intent  WAS null");
                 getDataFromDb();
             }
 
-//            if (TextUtils.equals(listenAfterReboot.toLowerCase(), "true")) {
                 setupFirebase();
                 startListening();
-//            }
 
             return START_STICKY;
         }
-// http://www.vogella.com/tutorials/android.html
+
         private void setupFirebase() {
 
             String isInitialized = (String) getValue("isInitialized", "false");
@@ -402,17 +290,6 @@ public class PushNotification extends AndroidNonvisibleComponent implements Comp
                     postNotif(snapshot.getValue().toString());
                 }
 
-                /*
-                public void onChildChanged(final DataSnapshot snapshot, String previousChildKey) {
-                                androidUIHandler.post(new Runnable() {
-                                    public void run() {
-                                        // Signal an event to indicate that the child data was changed.
-                                        // We post this to run in the Application's main UI thread.
-                                        DataChanged(snapshot.getKey(), snapshot.getValue());
-                                    }
-                                });
-                            }
-                 */
                 @Override
                 public void onChildMoved(DataSnapshot snapshot, String previousChildKey) {
                     // check this to see how to find out number of connected users:
@@ -463,9 +340,6 @@ public class PushNotification extends AndroidNonvisibleComponent implements Comp
             Log.d(LOG_TAG, "setupDataAndConnect: intent WAS null. ");
             servicePushPath = (String) getValue(TOPIC_PATH, "");
             servicePushUrl = (String) getValue(DATABASE_URL, "");
-//            listenAfterReboot = (String) getValue(LISTEN_AFTER_REBOOT, "false");
-
-//                pushTitle = (String) getValue(PUSH_TITLE, "");
         }
 
         private void startListening() {
@@ -537,9 +411,6 @@ public class PushNotification extends AndroidNonvisibleComponent implements Comp
             notificationIntent.addCategory("android.intent.category.LAUNCHER");
             notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
 
-
-//        CharSequence contentTitle = "Background" + Math.random();
-//        Intent notificationIntent = new Intent(context, PushNotification.class);
             PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
             notification.setLatestEventInfo(context, pushTitle, notifMsg, contentIntent);
             mNotificationManager.notify(1, notification);

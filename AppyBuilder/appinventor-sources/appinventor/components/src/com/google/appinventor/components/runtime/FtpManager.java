@@ -1,5 +1,8 @@
 // see here for some examples http://androidtrainningcenter.blogspot.com/2014/02/android-ftp-client-tutorial-with.html
 
+// Copyright 2016-2018 AppyBuilder.com, All Rights Reserved - Info@AppyBuilder.com
+// https://www.gnu.org/licenses/gpl-3.0.en.html
+
 package com.google.appinventor.components.runtime;
 
 import android.content.Intent;

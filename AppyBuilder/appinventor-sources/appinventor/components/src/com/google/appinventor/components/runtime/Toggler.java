@@ -1,3 +1,6 @@
+// Copyright 2016-2018 AppyBuilder.com, All Rights Reserved - Info@AppyBuilder.com
+// https://www.gnu.org/licenses/gpl-3.0.en.html
+
 package com.google.appinventor.components.runtime;
 
 
@@ -8,10 +11,6 @@ import com.google.appinventor.components.annotations.*;
 import com.google.appinventor.components.common.ComponentCategory;
 import com.google.appinventor.components.common.PropertyTypeConstants;
 import com.google.appinventor.components.common.YaVersion;
-
-//import com.google.appinventor.components.runtime.util.MediaUtil;
-//import com.google.appinventor.components.runtime.util.TextViewUtil;
-//import com.google.appinventor.components.runtime.util.ViewUtil;
 
 
 /**
