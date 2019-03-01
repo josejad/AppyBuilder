@@ -20,7 +20,7 @@ import java.util.LinkedList;
 @SimpleObject
 @UsesLibraries(libraries = "Androidplot-core-0.5.0-release.jar")
 public final class XYChart extends AndroidViewComponent {
-    private static final int HISTORY_SIZE = 30;            // number of points to plot in history
+    private static final int HISTORY_SIZE = 9999;            // number of points to plot in history
 
     private String title = "Title";
     private XYPlot xyPlot;
@@ -36,7 +36,7 @@ public final class XYChart extends AndroidViewComponent {
 
 
     private float xMinValue=0f;
-    private float xMaxValue=30f;
+    private float xMaxValue=9999f;
     private String xLabel="X Axis";
 
     private float yMinValue=-180f;
@@ -131,7 +131,7 @@ public final class XYChart extends AndroidViewComponent {
         return this.title;
     }
 
-    @DesignerProperty(editorType = PropertyTypeConstants.PROPERTY_TYPE_FLOAT, defaultValue = "30")
+    @DesignerProperty(editorType = PropertyTypeConstants.PROPERTY_TYPE_FLOAT, defaultValue = "9999")
     @SimpleProperty
     public void XMaxValue(float value) {
         this.xMaxValue=value;
